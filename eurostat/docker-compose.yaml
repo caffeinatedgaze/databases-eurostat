@@ -12,6 +12,6 @@ services:
       ports:
         - "3306:3306"
       volumes:
-        - ./docker/mysql/house:/docker-entrypoint-initdb.d
+        - ./docker/mysql/:/docker-entrypoint-initdb.d
       env_file:
         - .env
