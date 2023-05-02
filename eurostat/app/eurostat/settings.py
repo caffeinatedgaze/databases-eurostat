@@ -36,7 +36,7 @@ INSTALLED_APPS = [
 ROOT_URLCONF = 'eurostat.urls'
 
 DATABASES = {}
-
+STATIC_URL = "static/"
 TIME_ZONE = 'UTC'
 
 USE_TZ = True
