@@ -1,7 +1,14 @@
 from rest_framework.decorators import api_view
 from django.shortcuts import render
 
-from .db import get_db_connector, get_query
+from .db import run_query
+
+
+QUERY_PARAMS_MAP = {
+    1: ('from_year', 'to_year'),
+    2: ('limit', ),
+    3: ('year', 'quarter'),
+}
 
 
 @api_view(['GET'])
@@ -13,8 +20,10 @@ def query_view(request, num):
     if request.method == 'GET':
         return render(request, f'query_{num}.html')
     else:
-        db = get_db_connector()
-        quary = get_query(num)
-        data = request.data
-        result = db.execute(quary, data)
-        return render(request, f'result_{num}.html', context={'result': result})
+        return render(
+            request,
+            f'result_{num}.html',
+            context={
+                'result': run_query(num, *[int(request.data[param]) for param in QUERY_PARAMS_MAP[num]])
+            }
+        )
