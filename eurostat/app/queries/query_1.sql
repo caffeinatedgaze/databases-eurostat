@@ -1,0 +1,1 @@
+SELECT * FROM table_name WHERE ORDER BY id DESC LIMIT (%s); 
