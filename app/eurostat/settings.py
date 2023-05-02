@@ -55,6 +55,9 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'rest_framework.filters.OrderingFilter'
     ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.FormParser',
+    ],
 }
 
 TEMPLATE_DIRS = (
