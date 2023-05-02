@@ -1,0 +1,12 @@
+{% extends "common/base.html" %}
+{% block content %}
+    <h1>
+        Get the year, quarter and price with the largest prices
+    </h1>
+    <form action="/query/2" method="POST">
+        <label for="limit">Limit:</label>
+        <input type="text" id="limit" name="limit">
+        <br>
+        <input type="submit" value="Submit">
+    </form> 
+{% endblock %}

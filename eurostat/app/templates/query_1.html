@@ -1,10 +1,15 @@
 {% extends "common/base.html" %}
 {% block content %}
     <h1>
-        Query1 page
+        Get the year, quarter and price with the largest prices
     </h1>
-    <form action="/query_1" method="POST">
-        <label for="param_1">Param 1:</label>
-        <input type="text" id="param_1" name="param_1">>
+    <form action="/query/1" method="POST">
+        <label for="from_year">From year:</label>
+        <input type="text" id="from_year" name="from_year">
+        <br>
+        <label for="to_year">To year:</label>
+        <input type="text" id="to_year" name="to_year">
+        <br>
+        <input type="submit" value="Submit">
     </form> 
 {% endblock %}
