@@ -28,8 +28,6 @@ def get_query(num):
 def run_query(num, *params):
     db = get_db_connector()
     quary = get_query(num)
-    print(quary)
-    print(params)
     db.execute(quary, params)
     result = db.fetchall()
     db.close()

@@ -1,8 +1,8 @@
 INSERT INTO consumer_price
             (id,
              price,
-             location_id_real_consumer,
-             location_id_aggregated_consumer,
+             location_id_real,
+             location_id_aggregated,
              year,
              month,
              is_real)
