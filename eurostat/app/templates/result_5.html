@@ -3,9 +3,9 @@
     <h1>
         <p>Result 5 page</p>
     </h1>
+    <table>
     <tr>
         <th>Year</th>
-        <th>Month</th>
         <th>Price</th>
         <br>
     </tr>
@@ -15,8 +15,8 @@
                 {% for item in row %}
                     <td>{{item}}</td>
                 {% endfor %}
-                <br>
             </tr>
         {% endfor %}
     {% endif %}
+    </table>
 {% endblock %}
