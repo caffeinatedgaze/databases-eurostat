@@ -8,6 +8,9 @@ QUERY_PARAMS_MAP = {
     1: ('from_year', 'to_year'),
     2: ('limit', ),
     3: ('year', 'quarter'),
+    4: ('from_year', 'to_year'),
+    5: ('limit', ),
+    6: ('year', ),
 }
 
 

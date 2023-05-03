@@ -1,0 +1,12 @@
+{% extends "common/base.html" %}
+{% block content %}
+    <h1>
+        Get the names (descriptions) and prices for specific year:
+    </h1>
+    <form action="/query/6" method="POST">
+        <label for="year">Year:</label>
+        <input type="text" id="year" name="year">
+        <br>
+        <input type="submit" value="Submit">
+    </form> 
+{% endblock %}

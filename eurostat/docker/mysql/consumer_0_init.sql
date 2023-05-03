@@ -14,12 +14,12 @@ CREATE TABLE consumer_price
 (
     id INT auto_increment PRIMARY KEY,
     price                  FLOAT,
-    location_id_real_consumer       INT,
-    location_id_aggregated_consumer INT,
+    location_id_real       INT,
+    location_id_aggregated INT,
     year                   INT,
     month                  INT,
     is_real                BOOLEAN,
-    FOREIGN KEY (location_id_real_consumer) REFERENCES real_location_consumer (id),
-    FOREIGN KEY (location_id_aggregated_consumer) REFERENCES aggregated_location_consumer (id),
-    CHECK ((location_id_real_consumer IS NULL) != (location_id_aggregated_consumer IS NULL))
+    FOREIGN KEY (location_id_real) REFERENCES real_location_consumer (id),
+    FOREIGN KEY (location_id_aggregated) REFERENCES aggregated_location_consumer (id),
+    CHECK ((location_id_real IS NULL) != (location_id_aggregated IS NULL))
 );
