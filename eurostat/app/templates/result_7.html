@@ -3,6 +3,7 @@
     <h1>
         <p>Result 7 page</p>
     </h1>
+    <table>
     <tr>
         <th>Average Job Vacancy Ratio</th>
         <th>Location ID</th>
@@ -14,8 +15,8 @@
                 {% for item in row %}
                     <td>{{item}}</td>
                 {% endfor %}
-                <br>
             </tr>
         {% endfor %}
     {% endif %}
+    </table>
 {% endblock %}
