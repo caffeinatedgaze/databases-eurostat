@@ -1,0 +1,15 @@
+{% extends "common/base.html" %}
+{% block content %}
+    <h1>
+        Get the names (descriptions) and job vacancy ratio for specific year and quarter:
+    </h1>
+    <form action="/query/9" method="POST">
+        <label for="year">Year:</label>
+        <input type="text" id="year" name="year">
+        <br>
+        <label for="quarter">Quarter:</label>
+        <input type="text" id="quarter" name="quarter">
+        <br>
+        <input type="submit" value="Submit">
+    </form> 
+{% endblock %}
