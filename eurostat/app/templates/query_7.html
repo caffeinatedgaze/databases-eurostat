@@ -1,0 +1,15 @@
+{% extends "common/base.html" %}
+{% block content %}
+    <h1>
+        Get average job vacancy ratio  between 2 years for every location
+    </h1>
+    <form action="/query/7" method="POST">
+        <label for="from_year">From year:</label>
+        <input type="text" id="from_year" name="from_year">
+        <br>
+        <label for="to_year">To year:</label>
+        <input type="text" id="to_year" name="to_year">
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
