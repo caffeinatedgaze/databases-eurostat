@@ -21,13 +21,13 @@ const SearchInput = () => {
           tableSelected
       )
         .then((res) => {
-          res.json();
+          return res.json();
         })
         .then((data: any) => {
-          setValues(data.values as any);
+          setValues(data.map((d: any) => d.location));
         })
         .catch((err) => {
-          console.log("an error has happened");
+          console.log("an error has happened", err);
         });
     }, 1000);
 
@@ -119,9 +119,16 @@ const SearchInput = () => {
           </div>
         </div>
         {values.length > 0 && (
-          <ul className="container">
+          <ul className="container overflow-scroll bg-white z-20 p-8">
             {values.map((value) => {
-              return <li onClick={() => goToSearchResult(value)}>{value}</li>;
+              return (
+                <li
+                  className="text-center text-black border-b-2 border-black hover:cursor-pointer"
+                  onClick={() => goToSearchResult(value)}
+                >
+                  {value}
+                </li>
+              );
             })}
           </ul>
         )}
