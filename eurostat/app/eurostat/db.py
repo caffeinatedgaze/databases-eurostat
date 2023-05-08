@@ -1,6 +1,8 @@
 import os
 import mysql.connector
 
+from contextlib import contextmanager
+
 
 db = None
 query_cache = dict()
@@ -15,7 +17,18 @@ def get_db_connector():
             password=os.environ["MYSQL_PASSWORD"],
             database=os.environ["MYSQL_DATABASE"],
         )
-    return db.cursor()
+    else:
+        db.reconnect()
+    return db
+
+
+@contextmanager
+def db_ctx():
+    db = get_db_connector()
+    cur = db.cursor()
+    yield db, cur
+    cur.close()
+    db.close()
 
 
 def get_query(num):
@@ -26,43 +39,44 @@ def get_query(num):
 
 
 def run_query(num, *params):
-    db = get_db_connector()
-    query = get_query(num)
-    db.execute(query, params)
-    result = db.fetchall()
+    with db_ctx() as (db, cur):
+        query = get_query(num)
+        cur.execute(query, params)
+        result = cur.fetchall()
     return result
 
 
 def search_housing(q: str):
-    db = get_db_connector()
-    query = """
-        SELECT
-             house_price.id,
-             CASE
-                 WHEN house_price.is_real = 1 THEN real_location.name
-                 ELSE aggregated_location.description
-             END AS location,
-             house_price.price AS value,
-             quarter,
-             year
-        FROM
-            house_price house_price
-            LEFT JOIN real_location real_location
-                ON house_price.location_id_real = real_location.id
-            LEFT JOIN aggregated_location aggregated_location
-                ON house_price.location_id_aggregated = aggregated_location.id
-        WHERE
-            aggregated_location.description LIKE %s OR
-            real_location.name LIKE %s
-    """
-    db.execute(
-        query,
-        (
-            "%%" + q.upper() + "%%",
-            "%%" + q.upper() + "%%",
-        ),
-    )
-    result = db.fetchall()
+    with db_ctx() as (db, cur):
+        query = """
+            SELECT
+                 house_price.id,
+                 CASE
+                     WHEN house_price.is_real = 1 THEN real_location.name
+                     ELSE aggregated_location.description
+                 END AS location,
+                 house_price.price AS value,
+                 quarter,
+                 year
+            FROM
+                house_price house_price
+                LEFT JOIN real_location real_location
+                    ON house_price.location_id_real = real_location.id
+                LEFT JOIN aggregated_location aggregated_location
+                    ON house_price.location_id_aggregated = aggregated_location.id
+            WHERE
+                aggregated_location.description LIKE %s OR
+                real_location.name LIKE %s
+        """
+        cur.execute(
+            query,
+            (
+                "%%" + q.upper() + "%%",
+                "%%" + q.upper() + "%%",
+            ),
+        )
+        result = cur.fetchall()
+    
     return [
         {"id": x[0], "location": x[1], "value": x[2], "quarter": x[3], "year": x[4]}
         for x in result
@@ -70,7 +84,6 @@ def search_housing(q: str):
 
 
 def search_consumer(q: str):
-    db = get_db_connector()
     query = """
         SELECT
             consumer_price.id,
@@ -90,19 +103,21 @@ def search_consumer(q: str):
             aggregated_location.description LIKE %s OR
             real_location.name LIKE %s
     """
-    db.execute(
-        query,
-        (
-            "%%" + q.upper() + "%%",
-            "%%" + q.upper() + "%%",
-        ),
-    )
-    result = db.fetchall()
+
+    with db_ctx() as (db, cur):
+        cur.execute(
+            query,
+            (
+                "%%" + q.upper() + "%%",
+                "%%" + q.upper() + "%%",
+            ),
+        )
+        result = cur.fetchall()
+
     return [{"id": x[0], "location": x[1], "value": x[2], "year": x[3]} for x in result]
 
 
 def search_job(q: str):
-    db = get_db_connector()
     query = """
         SELECT
             job_vacancy_ratio.id,
@@ -123,14 +138,17 @@ def search_job(q: str):
             aggregated_location.description LIKE %s OR
             real_location.name LIKE %s
     """
-    db.execute(
-        query,
-        (
-            "%%" + q.upper() + "%%",
-            "%%" + q.upper() + "%%",
-        ),
-    )
-    result = db.fetchall()
+
+    with db_ctx() as (db, cur):
+        cur.execute(
+            query,
+            (
+                "%%" + q.upper() + "%%",
+                "%%" + q.upper() + "%%",
+            ),
+        )
+        result = cur.fetchall()
+
     return [
         {"id": x[0], "location": x[1], "value": x[2], "quarter": x[3], "year": x[4]}
         for x in result
@@ -138,7 +156,6 @@ def search_job(q: str):
 
 
 def details_housing(row_id):
-    db = get_db_connector()
     query = """
         SELECT
              CASE
@@ -157,13 +174,15 @@ def details_housing(row_id):
         WHERE
             house_price.id = %(row_id)s
     """
-    db.execute(query, { 'row_id': int(row_id)})
-    result = db.fetchall()[0]
+
+    with db_ctx() as (db, cur):
+        cur.execute(query, { 'row_id': int(row_id)})
+        result = cur.fetchall()[0]
+
     return {"location": result[0], "value": result[1], "quarter": result[2], "year": result[3]}
 
 
 def details_consumer(row_id):
-    db = get_db_connector()
     query = """
         SELECT
             CASE
@@ -182,8 +201,11 @@ def details_consumer(row_id):
         WHERE
             consumer_price.id = %(row_id)s
     """
-    db.execute(query, { 'row_id': int(row_id)})
-    result = db.fetchall()[0]
+    
+    with db_ctx() as (db, cur):
+        cur.execute(query, { 'row_id': int(row_id)})
+        result = cur.fetchall()[0]
+
     return {"location": result[0], "value": result[1], "month": result[2], "year": result[3]}
 
 
@@ -207,6 +229,9 @@ def details_job(row_id):
         WHERE
             job_vacancy_ratio.id = %(row_id)s
     """
-    db.execute(query, { 'row_id': int(row_id)})
-    result = db.fetchall()[0]
+    
+    with db_ctx() as (db, cur):
+        cur.execute(query, { 'row_id': int(row_id)})
+        result = cur.fetchall()[0]
+
     return {"location": result[0], "value": result[1], "quarter": result[2], "year": result[3]}
