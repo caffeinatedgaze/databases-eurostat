@@ -1,5 +1,6 @@
 import { tab } from "@testing-library/user-event/dist/tab";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SearchInput = () => {
   const [tableSelected, setTableSelected] = useState("");
@@ -8,13 +9,18 @@ const SearchInput = () => {
     setSearch(e.target.value);
   };
 
+  const [values, setValues] = useState([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       fetch("/api/search?q=" + search + "&table=" + tableSelected)
         .then((res) => {
           res.json();
         })
-        .then((data) => {})
+        .then((data: any) => {
+          setValues(data.values as any);
+        })
         .catch((err) => {
           console.log("an error has happened");
         });
@@ -23,9 +29,21 @@ const SearchInput = () => {
     return () => clearTimeout(delayDebounceFn);
   }, [search]);
 
+  const goToSearchResult = (value: any) => {};
+
+  const handleSubmit = () => {
+    navigate("/search-results", {
+      state: {
+        data: {
+          table: tableSelected,
+          query: search,
+        },
+      },
+    });
+  };
   return (
     <div className="w-full">
-      <form>
+      <form onSubmit={handleSubmit}>
         <div>
           <label
             htmlFor="countries"
@@ -95,6 +113,13 @@ const SearchInput = () => {
             </button>
           </div>
         </div>
+        {values.length > 0 && (
+          <ul className="container">
+            {values.map((value) => {
+              return <li onClick={() => goToSearchResult(value)}>{value}</li>;
+            })}
+          </ul>
+        )}
       </form>
     </div>
   );
