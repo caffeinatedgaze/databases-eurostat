@@ -42,7 +42,9 @@ def search_housing(q: str):
                  WHEN house_price.is_real = 1 THEN real_location.name
                  ELSE aggregated_location.description
              END AS location,
-             house_price.price AS value
+             house_price.price AS value,
+             quarter,
+             year
         FROM
             house_price house_price
             LEFT JOIN real_location real_location
@@ -62,7 +64,9 @@ def search_housing(q: str):
     )
     result = db.fetchall()
     db.close()
-    return result
+    return [
+        {"location": x[0], "value": x[1], "quarter": x[2], "year": x[3]} for x in result
+    ]
 
 
 def search_consumer(q: str):
@@ -73,7 +77,8 @@ def search_consumer(q: str):
                 WHEN consumer_price.is_real = 1 THEN real_location.name
                 ELSE aggregated_location.description
             END AS location,
-            consumer_price.price AS value
+            consumer_price.price AS value,
+            year
         FROM
             consumer_price consumer_price
             LEFT JOIN real_location_consumer real_location
@@ -93,7 +98,7 @@ def search_consumer(q: str):
     )
     result = db.fetchall()
     db.close()
-    return result
+    return [{"location": x[0], "value": x[1], "year": x[2]} for x in result]
 
 
 def search_job(q: str):
@@ -104,7 +109,9 @@ def search_job(q: str):
                 WHEN job_vacancy_ratio.is_real = 1 THEN real_location.name
                 ELSE aggregated_location.description
             END AS location,
-            job_vacancy_ratio.ratio
+            job_vacancy_ratio.ratio AS value,
+            quarter,
+            year
         FROM
             job_vacancy_ratio job_vacancy_ratio
             LEFT JOIN real_location_job real_location
@@ -124,4 +131,6 @@ def search_job(q: str):
     )
     result = db.fetchall()
     db.close()
-    return result
+    return [
+        {"location": x[0], "value": x[1], "quarter": x[2], "year": x[3]} for x in result
+    ]

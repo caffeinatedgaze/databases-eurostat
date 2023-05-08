@@ -64,6 +64,6 @@ def search(request: HttpRequest):
         )
 
     return JsonResponse(
-        [{"location": each[0], "value": each[1]} for each in result],
+        result,
         safe=False,
     )
