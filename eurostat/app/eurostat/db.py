@@ -15,6 +15,8 @@ def get_db_connector():
             password=os.environ["MYSQL_PASSWORD"],
             database=os.environ["MYSQL_DATABASE"],
         )
+    else:
+        db.reconnect()
     return db.cursor()
 
 
