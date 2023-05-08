@@ -7,7 +7,7 @@ const SearchResult = () => {
   const [error, setError] = useState(null);
   useEffect(() => {
     fetch(
-      `http://sw.hackety.space:9999/search/?q=${state.data.query}&table=${state.data.table}`
+      `${process.env.REACT_APP_DOMAIN}/search/?q=${state.data.query}&table=${state.data.table}`
     )
       .then((res) => res.json())
       .then((data: any) => {
@@ -49,7 +49,7 @@ const SearchResult = () => {
                     className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:text-blue-600 hover:cursor-pointer"
                     onClick={() =>
                       window.open(
-                        `http://sw.hackety.space:9999/search/?q=${d.id}&table=${state.data.table}`
+                        `${process.env.REACT_APP_DOMAIN}search/?q=${d.id}&table=${state.data.table}`
                       )
                     }
                   >

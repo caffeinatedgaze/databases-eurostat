@@ -15,7 +15,8 @@ const SearchInput = () => {
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       fetch(
-        "http://sw.hackety.space:9999/search/?q=" +
+        process.env.REACT_APP_DOMAIN +
+          "/search/?q=" +
           search +
           "&table=" +
           tableSelected
