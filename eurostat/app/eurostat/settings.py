@@ -19,53 +19,55 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'mysecretkey'
+SECRET_KEY = "mysecretkey"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
 INSTALLED_APPS = [
-    'rest_framework',
-    'eurostat',
+    "rest_framework",
+    "eurostat",
+    "corsheaders",
+]
+
+MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.contrib.staticfiles'
 ]
 
-ROOT_URLCONF = 'eurostat.urls'
+ROOT_URLCONF = "eurostat.urls"
 
 DATABASES = {}
 STATIC_URL = "static/"
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_TZ = True
 
 # Django REST Framework
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
-        'rest_framework.renderers.JSONRenderer',
+        "rest_framework.renderers.JSONRenderer",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [],
     "DEFAULT_PERMISSION_CLASSES": [],
     "UNAUTHENTICATED_USER": None,
-    'PAGE_SIZE': 10,
-    'DEFAULT_PAGINATION_CLASS': \
-        'rest_framework.pagination.LimitOffsetPagination',
-    'DEFAULT_FILTER_BACKENDS': [
-        'rest_framework.filters.OrderingFilter'
-    ],
+    "PAGE_SIZE": 10,
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "DEFAULT_FILTER_BACKENDS": ["rest_framework.filters.OrderingFilter"],
 }
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
-)
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, "templates"),)
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': TEMPLATE_DIRS,
-        'APP_DIRS': True,
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": TEMPLATE_DIRS,
+        "APP_DIRS": True,
     },
 ]
