@@ -15,8 +15,6 @@ def get_db_connector():
             password=os.environ["MYSQL_PASSWORD"],
             database=os.environ["MYSQL_DATABASE"],
         )
-    else:
-        db.reconnect()
     return db.cursor()
 
 
@@ -32,7 +30,6 @@ def run_query(num, *params):
     query = get_query(num)
     db.execute(query, params)
     result = db.fetchall()
-    db.close()
     return result
 
 
@@ -66,7 +63,6 @@ def search_housing(q: str):
         ),
     )
     result = db.fetchall()
-    db.close()
     return [
         {"id": x[0], "location": x[1], "value": x[2], "quarter": x[3], "year": x[4]}
         for x in result
@@ -102,7 +98,6 @@ def search_consumer(q: str):
         ),
     )
     result = db.fetchall()
-    db.close()
     return [{"id": x[0], "location": x[1], "value": x[2], "year": x[3]} for x in result]
 
 
@@ -136,7 +131,6 @@ def search_job(q: str):
         ),
     )
     result = db.fetchall()
-    db.close()
     return [
         {"id": x[0], "location": x[1], "value": x[2], "quarter": x[3], "year": x[4]}
         for x in result
@@ -165,7 +159,6 @@ def details_housing(row_id):
     """
     db.execute(query, { 'row_id': int(row_id)})
     result = db.fetchall()[0]
-    db.close()
     return {"location": result[0], "value": result[1], "quarter": result[2], "year": result[3]}
 
 
@@ -191,7 +184,6 @@ def details_consumer(row_id):
     """
     db.execute(query, { 'row_id': int(row_id)})
     result = db.fetchall()[0]
-    db.close()
     return {"location": result[0], "value": result[1], "month": result[2], "year": result[3]}
 
 
@@ -217,5 +209,4 @@ def details_job(row_id):
     """
     db.execute(query, { 'row_id': int(row_id)})
     result = db.fetchall()[0]
-    db.close()
     return {"location": result[0], "value": result[1], "quarter": result[2], "year": result[3]}

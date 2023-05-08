@@ -97,7 +97,10 @@ def detail_view(request, table, num):
             status=404,
         )
 
-    return JsonResponse(
-        table_query(num),
-        safe=False,
+    return render(
+            request,
+            f"details_{table}.html",
+            context={
+                "result": table_query(num)
+            },
     )
