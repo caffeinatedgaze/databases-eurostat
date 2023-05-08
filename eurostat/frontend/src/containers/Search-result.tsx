@@ -49,13 +49,13 @@ const SearchResult = () => {
                     className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:text-blue-600 hover:cursor-pointer"
                     onClick={() =>
                       window.open(
-                        `${process.env.REACT_APP_DOMAIN}search/?q=${d.id}&table=${state.data.table}`
+                        `${process.env.REACT_APP_DOMAIN}details/${state.data.table}/${d.id}`
                       )
                     }
                   >
                     <td className="px-6 py-4">{d.location}</td>
                     <td className="px-6 py-4">{d.value}</td>
-                    <td className="px-6 py-4">{d.quarter}</td>
+                    <td className="px-6 py- 4">{d.quarter}</td>
                     <td className="px-6 py-4">{d.year}</td>
                   </tr>
                 );
