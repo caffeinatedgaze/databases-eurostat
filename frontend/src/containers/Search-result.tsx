@@ -45,7 +45,14 @@ const SearchResult = () => {
             <tbody className="overflow-scroll">
               {data.map((d: any) => {
                 return (
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <tr
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:text-blue-600 hover:cursor-pointer"
+                    onClick={() =>
+                      window.open(
+                        `http://sw.hackety.space:9999/search/?q=${d.id}&table=${state.data.table}`
+                      )
+                    }
+                  >
                     <td className="px-6 py-4">{d.location}</td>
                     <td className="px-6 py-4">{d.value}</td>
                     <td className="px-6 py-4">{d.quarter}</td>
