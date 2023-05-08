@@ -1,0 +1,22 @@
+{% extends "common/base.html" %}
+{% block content %}
+    <h1>
+        <p>Result 4 page</p>
+    </h1>
+    <table>
+    <tr>
+        <th>Average Price</th>
+        <th>Location ID</th>
+        <br>
+    </tr>
+    {% if result %}
+        {% for row in result %}
+            <tr>
+                {% for item in row %}
+                    <td>{{item}}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    {% endif %}
+    </table>
+{% endblock %}

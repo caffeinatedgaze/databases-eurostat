@@ -1,0 +1,23 @@
+{% extends "common/base.html" %}
+{% block content %}
+    <h1>
+        <p>Result 2 page</p>
+    </h1>
+    <table>
+    <tr>
+        <th>Year</th>
+        <th>Quarter</th>
+        <th>Price</th>
+        <br>
+    </tr>
+    {% if result %}
+        {% for row in result %}
+            <tr>
+                {% for item in row %}
+                    <td>{{item}}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    {% endif %}
+    </table>
+{% endblock %}
