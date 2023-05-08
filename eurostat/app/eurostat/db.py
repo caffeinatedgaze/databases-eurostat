@@ -134,3 +134,81 @@ def search_job(q: str):
     return [
         {"location": x[0], "value": x[1], "quarter": x[2], "year": x[3]} for x in result
     ]
+
+
+def details_housing(row_id):
+    db = get_db_connector()
+    query = """
+        SELECT
+             CASE
+                 WHEN house_price.is_real = 1 THEN real_location.name
+                 ELSE aggregated_location.description
+             END AS location,
+             house_price.price AS value,
+             quarter,
+             year
+        FROM
+            house_price house_price
+            LEFT JOIN real_location real_location
+                ON house_price.location_id_real = real_location.id
+            LEFT JOIN aggregated_location aggregated_location
+                ON house_price.location_id_aggregated = aggregated_location.id
+        WHERE
+            house_price.id = %(row_id)s
+    """
+    db.execute(query, { 'row_id': int(row_id)})
+    result = db.fetchall()[0]
+    db.close()
+    return {"location": result[0], "value": result[1], "quarter": result[2], "year": result[3]}
+
+
+def details_consumer(row_id):
+    db = get_db_connector()
+    query = """
+        SELECT
+            CASE
+                WHEN consumer_price.is_real = 1 THEN real_location.name
+                ELSE aggregated_location.description
+            END AS location,
+            consumer_price.price AS value,
+            year,
+            month
+        FROM
+            consumer_price consumer_price
+            LEFT JOIN real_location_consumer real_location
+                   ON consumer_price.location_id_real = real_location.id
+            LEFT JOIN aggregated_location_consumer aggregated_location
+                   ON consumer_price.location_id_aggregated = aggregated_location.id
+        WHERE
+            consumer_price.id = %(row_id)s
+    """
+    db.execute(query, { 'row_id': int(row_id)})
+    result = db.fetchall()[0]
+    db.close()
+    return {"location": result[0], "value": result[1], "month": result[2], "year": result[3]}
+
+
+def details_job(row_id):
+    db = get_db_connector()
+    query = """
+        SELECT
+            CASE
+                WHEN job_vacancy_ratio.is_real = 1 THEN real_location.name
+                ELSE aggregated_location.description
+            END AS location,
+            job_vacancy_ratio.ratio AS value,
+            quarter,
+            year
+        FROM
+            job_vacancy_ratio job_vacancy_ratio
+            LEFT JOIN real_location_job real_location
+                ON job_vacancy_ratio.location_id_real = real_location.id
+            LEFT JOIN aggregated_location_job aggregated_location
+                ON job_vacancy_ratio.location_id_aggregated = aggregated_location.id
+        WHERE
+            job_vacancy_ratio.id = %(row_id)s
+    """
+    db.execute(query, { 'row_id': int(row_id)})
+    result = db.fetchall()[0]
+    db.close()
+    return {"location": result[0], "value": result[1], "quarter": result[2], "year": result[3]}

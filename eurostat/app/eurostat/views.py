@@ -2,7 +2,15 @@ from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 
-from .db import run_query, search_housing, search_consumer, search_job
+from .db import (
+    run_query,
+    search_housing,
+    search_consumer,
+    search_job,
+    details_housing,
+    details_consumer,
+    details_job
+)
 
 QUERY_PARAMS_MAP = {
     1: ("from_year", "to_year"),
@@ -14,6 +22,12 @@ QUERY_PARAMS_MAP = {
     7: ("from_year", "to_year"),
     8: ("limit",),
     9: ("year", "quarter"),
+}
+
+QUERY_TABLES_MAP = {
+    "housing": details_housing,
+    "consumer": details_consumer,
+    "job": details_job,
 }
 
 
@@ -65,5 +79,25 @@ def search(request: HttpRequest):
 
     return JsonResponse(
         result,
+        safe=False,
+    )
+
+
+
+@api_view(["GET"])
+def detail_view(request, table, num):
+    
+    table_query = QUERY_TABLES_MAP.get(table)
+
+    if table_query is None:
+        return JsonResponse(
+            {
+                "detail": f"No such table: {table}. Choose either housing, consumer, or job"
+            },
+            status=404,
+        )
+
+    return JsonResponse(
+        table_query(num),
         safe=False,
     )
