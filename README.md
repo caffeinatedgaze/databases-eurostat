@@ -42,3 +42,7 @@ CREATE TABLE House_Price
 );
 ```
 
+# Note
+
+For search use this url: http://sw.hackety.space:3000/
+For details use this url: http://sw.hackety.space:8000/details/housing/2
