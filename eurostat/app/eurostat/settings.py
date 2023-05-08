@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     'rest_framework',
     'eurostat',
+    'django.contrib.staticfiles'
 ]
 
 ROOT_URLCONF = 'eurostat.urls'
