@@ -38,6 +38,7 @@ def search_housing(q: str):
     db = get_db_connector()
     query = """
         SELECT
+             house_price.id,
              CASE
                  WHEN house_price.is_real = 1 THEN real_location.name
                  ELSE aggregated_location.description
@@ -65,7 +66,8 @@ def search_housing(q: str):
     result = db.fetchall()
     db.close()
     return [
-        {"location": x[0], "value": x[1], "quarter": x[2], "year": x[3]} for x in result
+        {"id": x[0], "location": x[1], "value": x[2], "quarter": x[3], "year": x[4]}
+        for x in result
     ]
 
 
@@ -73,6 +75,7 @@ def search_consumer(q: str):
     db = get_db_connector()
     query = """
         SELECT
+            consumer_price.id,
             CASE
                 WHEN consumer_price.is_real = 1 THEN real_location.name
                 ELSE aggregated_location.description
@@ -98,13 +101,14 @@ def search_consumer(q: str):
     )
     result = db.fetchall()
     db.close()
-    return [{"location": x[0], "value": x[1], "year": x[2]} for x in result]
+    return [{"id": x[0], "location": x[1], "value": x[2], "year": x[3]} for x in result]
 
 
 def search_job(q: str):
     db = get_db_connector()
     query = """
         SELECT
+            job_vacancy_ratio.id,
             CASE
                 WHEN job_vacancy_ratio.is_real = 1 THEN real_location.name
                 ELSE aggregated_location.description
@@ -132,5 +136,6 @@ def search_job(q: str):
     result = db.fetchall()
     db.close()
     return [
-        {"location": x[0], "value": x[1], "quarter": x[2], "year": x[3]} for x in result
+        {"id": x[0], "location": x[1], "value": x[2], "quarter": x[3], "year": x[4]}
+        for x in result
     ]
