@@ -13,8 +13,8 @@ def get_db_connector():
     if db is None:
         db = mysql.connector.connect(
             host="mysql",
-            user=os.environ["MYSQL_USER"],
-            password=os.environ["MYSQL_PASSWORD"],
+            user=os.environ["MYSQL_USER_RO"],
+            password=os.environ["MYSQL_PASSWORD_RO"],
             database=os.environ["MYSQL_DATABASE"],
         )
     else:
